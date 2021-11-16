@@ -26,31 +26,31 @@ def draw_map(pos):
 
     return gau_map
 
+def generate_gau():
+    if __name__ == '__main__':
+        parser = argparse.ArgumentParser(description="Convert csv to image gaussian")
+        parser.add_argument("--csv_file_path", type=str, default="./")
+        parser.add_argument("--csv_file_name", type=str, default="TLGAN.csv")
+        parser.add_argument("--map_save_path", type=str, default="./images/gaussian_npy/")
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="Convert csv to image gaussian")
-    parser.add_argument("--csv_file_path", type=str, default="./")
-    parser.add_argument("--csv_file_name", type=str, default="TLGAN.csv")
-    parser.add_argument("--map_save_path", type=str, default="./images/gaussian_map/")
+        args = parser.parse_args()
 
-    args = parser.parse_args()
+        if os.path.exists(args.map_save_path):
+            for file in glob.glob(args.map_save_path+"/*"):
+                os.remove(file)
 
-    if os.path.exists(args.map_save_path):
-        for file in glob.glob(args.map_save_path+"/*"):
-            os.remove(file)
+        with open(os.path.join(args.csv_file_path, args.csv_file_name), 'r', encoding='utf-8') as csv_file:
+            reader = csv.reader(csv_file)
+            for line in reader:
+                name = line[0]
+                # name split
+                line = line[1:]
+                line = list(map(int, line))
+                # csv str to int
+                line = [line[i:i+4] for i in range(0, len(line), 4)]
+                # split 4 x_min,x_max,y_min,y_max 
+                img = draw_map(line)
 
-    with open(os.path.join(args.csv_file_path, args.csv_file_name), 'r', encoding='utf-8') as csv_file:
-        reader = csv.reader(csv_file)
-        for line in reader:
-            name = line[0]
-            # name split
-            line = line[1:]
-            line = list(map(int, line))
-            # csv str to int
-            line = [line[i:i+4] for i in range(0, len(line), 4)]
-            # split 4 x_min,x_max,y_min,y_max 
-            img = draw_map(line)
-
-            if not os.path.exists(args.map_save_path):
-                os.mkdir(args.map_save_path)
-            np.save(os.path.join(args.map_save_path, name.split('.')[0]+".npy"), img*255)
+                if not os.path.exists(args.map_save_path):
+                    os.mkdir(args.map_save_path)
+                np.save(os.path.join(args.map_save_path, name.split('.')[0]+".npy"), img*255)
