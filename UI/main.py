@@ -233,9 +233,13 @@ def execute():
 
 # 이미지 저장 함수 (5개 까지 저장 가능)
 def func_img_save():
+  save_img = list()
   j = 0
+  root = tkinter.Tk()
+  root.withdraw()
+  dir_path = filedialog.askdirectory(parent=root,initialdir="/",title='Please select a directory')   
   for i in scale_mainImg:
-    pygame.image.save(i, f'save\edit{j}.png')
+    pygame.image.save(i, f'{dir_path}/edit{j}.png')
     j+=1
   
 
@@ -258,7 +262,6 @@ def main():
     
     
     # 기능 버튼 
-    
     if len(imgPath) > 0:
       handWriteEraser_Button = Button_handwrite_erase(image_scale_handwriteEraser, x+750, 0, 250, 250, image_scale_handwriteEraser_click, x+750, 0, remove_handwriting) 
       highlightEraser_Button = Button(image_scale_eraser, x+750, 250, 250, 250, image_scale_eraser_click, x+750, 250, execute) 
