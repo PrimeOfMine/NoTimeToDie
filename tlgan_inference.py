@@ -105,7 +105,7 @@ def remove_handwriting(img_path, model_path):
                 croped_img_list.append(img_int[ele[1][1]-corrected_size:ele[1][1]+font_max_size, ele[0][0]:ele[1][0]])
                 croped_img_axis.append(ele)
             
-        print(ele[0][1],ele[1][1], ele[0][0],ele[1][0])
+       
 
     # 흰색 이미지 생성
     img_output = np.full((256, 256, 3), 255, dtype=np.uint8)

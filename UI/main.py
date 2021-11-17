@@ -63,8 +63,9 @@ img_scale_main = pygame.transform.scale(img_main, (750, 750+y))
 
 # User image(사용할 이미지)   
 imgPath = list() # 이미지 path 
-mainImg = list() # 이미지 file
-scale_mainImg = list() # scale 이미지 file
+imgFile = list() # 이미지 file
+mainImg = list() # 이미지 surface
+scale_mainImg = list() # scale 이미지 surface
 small_img = list() # 버튼 이미지
 global show_main
 
@@ -91,17 +92,26 @@ class Button:
 # 버튼 클릭시 action을 실행한다.
 class Button_inference:  
   def __init__(self, img_in, x, y, width, height, img_act, x_act, y_act, action = None, param = None):
+
+    tmp = list()
+    num = 0
+    
     mouse = pygame.mouse.get_pos()
     click = pygame.mouse.get_pressed()
     if x + width > mouse[0] > x and y + height > mouse[1] > y: 
       Surface.blit(img_act, (x_act, y_act))
       if click[0] and action != None: 
         time.sleep(1)
-
-        # ACTION을 pygame blit함수로 ..##################################### 수정 필요
-        Surface.blit(pygame.transform.scale(pygame.surfarray.make_surface(action(param, model_path)), (750, 750+y)), (200, 0))
-
-        pygame.Surface.update()
+      for i in param:  
+        imgFile.append(action(i, model_path))
+        mainImg[num] = pygame.surfarray.make_surface(imgFile[num]) # surface
+        tmp.append(pygame.transform.scale(mainImg[num], (750, 750)))
+        tmp[num] = pygame.transform.flip(tmp[num], True, False)
+        tmp[num] = pygame.transform.rotate(tmp[num], 90) # 이미지가 돌아감, 오류로 추정
+        scale_mainImg[num] = pygame.transform.scale(tmp[num], (750, 750+y))
+        num += 1
+        
+       
      
     else: 
         Surface.blit(img_in, (x, y))      
@@ -129,7 +139,7 @@ index = 0
 
 # 메인에 화면 송출
 def main_screen(i):
-  if  i == 0:
+  if i == 0:
     Surface.blit(img_scale_main, (200, 0)) # 기본은 검은 화면 
   if i == 1: 
     Surface.blit(scale_mainImg[0], (200, 0)) # 첫번째 이미지(1)
@@ -204,16 +214,14 @@ def kmeans_color_quantization(image, clusters=2, rounds=1): # parameter => 경�
 # kmeans 실행 코드
 def execute(): 
   highlight_erasedImg = list() # 하이라이트 지워진 이미지 경로 
-  surf = list()
   tmp = list()
-  global scale_mainImg
 
-  for ele in imgPath: # 경로에 한글이 들어가지 않도록 주의
-    highlight_erasedImg.append(kmeans_color_quantization(cv2.imread(ele)))
+  for i in range(0, len(imgPath)): # 경로에 한글이 들어가지 않도록 주의
+    highlight_erasedImg.append(kmeans_color_quantization(imgFile[i])) # 이미지 
 
   for i in range(0, len(highlight_erasedImg)):
-    surf.append(pygame.surfarray.make_surface(highlight_erasedImg[i]))
-    tmp.append(pygame.transform.scale(surf[i], (750, 750)))
+    mainImg[i] = pygame.surfarray.make_surface(highlight_erasedImg[i]) # surface
+    tmp.append(mainImg[i])
     tmp[i] = pygame.transform.flip(tmp[i], True, False)
     tmp[i] = pygame.transform.rotate(tmp[i], 90) # 이미지가 돌아감, 오류로 추정
     scale_mainImg[i] = pygame.transform.scale(tmp[i], (750, 750+y))  
@@ -246,9 +254,10 @@ def main():
     
     
     # 기능 버튼 
-    highlightEraser_Button = Button(image_scale_eraser, x+750, 0, 250, 250, image_scale_eraser_click, x+750, 0, execute) 
+    
     if len(imgPath)>0:
-      handWriteEraser_Button = Button_inference(image_scale_handwriteEraser, x+750, 250, 250, 250, image_scale_handwriteEraser_click, x+750, 250, remove_handwriting, imgPath[0]) 
+      highlightEraser_Button = Button(image_scale_eraser, x+750, 0, 250, 250, image_scale_eraser_click, x+750, 0, execute) 
+      handWriteEraser_Button = Button_inference(image_scale_handwriteEraser, x+750, 250, 250, 250, image_scale_handwriteEraser_click, x+750, 250, remove_handwriting, imgPath) 
     Search_Button = Button(image_scale_search, x+750, 500, 250, 250, image_scale_search_click, x+750, 500, img_load)
     save_Button =  Button(img_save, x+750, 750, 250, y, img_save_click, x+750, 750, func_img_save)
     
