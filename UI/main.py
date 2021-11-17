@@ -109,7 +109,7 @@ class Button_handwrite_erase:
           tmp.append(pygame.transform.scale(mainImg[num], (750, 750)))
           tmp[num] = pygame.transform.flip(tmp[num], True, False)
           tmp[num] = pygame.transform.rotate(tmp[num], 90) # 이미지가 돌아감, 오류로 추정
-          scale_mainImg[num] = pygame.transform.scale(tmp[num], (750, 750+y))
+          scale_mainImg[num] = pygame.transform.scale(tmp[num], (750, 750+150))
           num += 1
         
        
@@ -259,9 +259,9 @@ def main():
     
     # 기능 버튼 
     
-    
-    highlightEraser_Button = Button(image_scale_eraser, x+750, 0, 250, 250, image_scale_eraser_click, x+750, 0, execute) 
-    handWriteEraser_Button = Button_handwrite_erase(image_scale_handwriteEraser, x+750, 250, 250, 250, image_scale_handwriteEraser_click, x+750, 250, remove_handwriting) 
+    if len(imgPath) > 0:
+      handWriteEraser_Button = Button_handwrite_erase(image_scale_handwriteEraser, x+750, 0, 250, 250, image_scale_handwriteEraser_click, x+750, 0, remove_handwriting) 
+      highlightEraser_Button = Button(image_scale_eraser, x+750, 250, 250, 250, image_scale_eraser_click, x+750, 250, execute) 
     Search_Button = Button(image_scale_search, x+750, 500, 250, 250, image_scale_search_click, x+750, 500, img_load)
     save_Button =  Button(img_save, x+750, 750, 250, y, img_save_click, x+750, 750, func_img_save)
     
