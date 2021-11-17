@@ -13,13 +13,18 @@ from pygame.locals import QUIT, KEYDOWN
 from tkinter import filedialog
 from pathlib import Path
 
+sys.path.append('..')
+
+from tlgan_inference import remove_handwriting
+
 
 pygame.init()
 
 x = 200 # 새로 늘릴 x축 
-
+y = 150 # 새로 늘릴 y축 
 # setting display     
-Surface = pygame.display.set_mode((200+1000, 750))
+
+Surface = pygame.display.set_mode((x+1000, 750+y))
 
 #setting fps
 FPSCLOCK  = pygame.time.Clock()
@@ -36,6 +41,10 @@ img_handwriteEraser_click = pygame.image.load("handwriteEraser_click.png")
 img_search = pygame.image.load("search.png")
 img_search_click = pygame.image.load("search_click.png")
 img_main = pygame.image.load("main.png")
+img_save = pygame.image.load("save.png")
+img_save_click = pygame.image.load("save_click.png")
+
+
 
 # 기능 이미지 사진
 image_scale_handwriteEraser = pygame.transform.scale(img_handwriteEraser, (250, 250))
@@ -44,7 +53,9 @@ image_scale_eraser = pygame.transform.scale(img_eraser, (250, 250))
 image_scale_eraser_click = pygame.transform.scale(img_eraser_click, (250, 250))
 image_scale_search = pygame.transform.scale(img_search, (250, 250))
 image_scale_search_click = pygame.transform.scale(img_search_click, (250, 250))
-img_scale_main = pygame.transform.scale(img_main, (750, 750))
+
+# 첫 메인 img
+img_scale_main = pygame.transform.scale(img_main, (750, 750+y))
 
 # User image(사용할 이미지)   
 imgPath = list() # 이미지 path 
@@ -70,6 +81,23 @@ class Button:
      
     else: 
         Surface.blit(img_in, (x, y))
+        
+
+
+# 버튼 클릭시 action을 실행한다.
+class Button_wt_param:  
+  def __init__(self, img_in, x, y, width, height, img_act, x_act, y_act, action = None, param = None):
+    mouse = pygame.mouse.get_pos()
+    click = pygame.mouse.get_pressed()
+    if x + width > mouse[0] > x and y + height > mouse[1] > y: 
+      Surface.blit(img_act, (x_act, y_act))
+      if click[0] and action != None: 
+        time.sleep(1)
+        action(param) # ACTION을 pygame blit함수로 ..##################################### 수정 필요
+     
+    else: 
+        Surface.blit(img_in, (x, y))      
+  
 
 # user_img 배열
 def img_load(): 
@@ -84,9 +112,8 @@ def img_load():
   for i in range(0, len(file_list)):
     imgPath.append(dir_path + '/' + file_list[i]) # 이미지 주소 
     mainImg.append(pygame.image.load(imgPath[i])) # 이미지 파일
-    scale_mainImg.append(pygame.transform.scale(mainImg[i], (750, 750))) # 화면 비율에 맞춘 이미지 
+    scale_mainImg.append(pygame.transform.scale(mainImg[i], (750, 750+y))) # 화면 비율에 맞춘 이미지 
     small_img.append(pygame.transform.scale(scale_mainImg[i], (100, 100))) # 좌측 버튼 이미지 
-  print(type(scale_mainImg))
   
 # 리스트 번호 
 index = 0
@@ -166,10 +193,9 @@ def kmeans_color_quantization(image, clusters=2, rounds=1): # parameter => 경�
     res = centers[labels.flatten()]
     return res.reshape((image.shape))
 
-# 실행 코드
-
+# kmeans 실행 코드
 def execute(): 
-  highlight_erasedImg = list()
+  highlight_erasedImg = list() # 하이라이트 지워진 이미지 경로 
   surf = list()
   tmp = list()
   global scale_mainImg
@@ -179,20 +205,23 @@ def execute():
 
   for i in range(0, len(highlight_erasedImg)):
     surf.append(pygame.surfarray.make_surface(highlight_erasedImg[i]))
-    highlight_erasedImg[i] = pygame.transform.scale(surf[i], (750, 750))
-    mainImg[i] = highlight_erasedImg[i]
-    tmp.append(pygame.transform.scale(mainImg[i], (750, 750)))
-  
-  for i in range(0, len(tmp)):
+    tmp.append(pygame.transform.scale(surf[i], (750, 750)))
     tmp[i] = pygame.transform.flip(tmp[i], True, False)
-    tmp[i] = pygame.transform.rotate(tmp[i], 90)
-    scale_mainImg[i] = tmp[i]   
+    tmp[i] = pygame.transform.rotate(tmp[i], 90) # 이미지가 돌아감, 오류로 추정
+    scale_mainImg[i] = pygame.transform.scale(tmp[i], (750, 750+y))  
+  
+
+# 이미지 저장 함수 (5개 까지 저장 가능)
+def func_img_save():
+  j = 0
+  for i in scale_mainImg:
+    pygame.image.save(i, f'save\edit{j}.png')
+    j+=1
+  
 
 # main 
 def main():
   while True: 
-    
-    
     
     # display color
     Surface.fill((255, 255, 255))
@@ -204,16 +233,18 @@ def main():
       
     
     # 왼쪽 이미지 리스트 구역 
-    pygame.draw.rect(Surface, (255, 255, 255), (0, 0, 200, 750))
+    pygame.draw.rect(Surface, (255, 255, 255), (0, 0, 200, 750+y))
     
     
     
     # 기능 버튼 
-    highlightEraser_Buttom = Button(image_scale_eraser, x+750, 0, 250, 250, image_scale_eraser_click, x+750, 0, execute) # Surface.blit(image_scale_spoid, (860, 50))
-    handWriteEraser_Buttom = Button(image_scale_handwriteEraser, x+750, 250, 250, 250, image_scale_handwriteEraser_click, x+750, 250, execute) # Surface.blit(image_scale_eraser, (860, 570))
-    Search_Buttom = Button(image_scale_search, x+750, 500, 250, 250, image_scale_search_click, x+750, 500, img_load) # Surface.blit(img_pen, (860 , 310))
+    highlightEraser_Button = Button(image_scale_eraser, x+750, 0, 250, 250, image_scale_eraser_click, x+750, 0, execute) 
+    if len(imgPath)>0:
+      handWriteEraser_Button = Button_wt_param(image_scale_handwriteEraser, x+750, 250, 250, 250, image_scale_handwriteEraser_click, x+750, 250, remove_handwriting, imgPath[0]) 
+    Search_Button = Button(image_scale_search, x+750, 500, 250, 250, image_scale_search_click, x+750, 500, img_load)
+    save_Button =  Button(img_save, x+750, 750, 250, y, img_save_click, x+750, 750, func_img_save)
     
-    # 작은 이미지 버튼 
+    # 작은 이미지 버튼 S
     if len(scale_mainImg) >= 1: 
       img0_button = Button(small_img[0], 50, 25, 100, 100, small_img[0], 50, 25, main_img1) 
       if len(scale_mainImg) >= 2: 
@@ -231,4 +262,3 @@ def main():
 
 if __name__ == '__main__': 
     main()
-

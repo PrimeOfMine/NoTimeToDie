@@ -62,7 +62,7 @@ def tlgan_infer(img, weight_path="./weights/generator.pt", img_col_size=60, img_
 
 ## Inference code 완료
 def remove_handwriting(img_path):    
-    tlgan_model_path = "./weights/generator_15epoch.pt"
+    tlgan_model_path = "C:\\Users\\dongj\\Desktop\\git_test\\NoTimeToDie\\weights\\generator_15epoch.pt"
     path_to_img = img_path
 
     img = cv2.imread(path_to_img).astype(np.float32)

@@ -1,7 +1,7 @@
 numpy
 opencv-python
 matplotlib
-tkinter
 pygame
+pyautogui
 torch
 torchvision
