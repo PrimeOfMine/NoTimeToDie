@@ -90,8 +90,8 @@ class Button:
 
 
 # 버튼 클릭시 action을 실행한다.
-class Button_inference:  
-  def __init__(self, img_in, x, y, width, height, img_act, x_act, y_act, action = None, param = None):
+class Button_handwrite_erase:  
+  def __init__(self, img_in, x, y, width, height, img_act, x_act, y_act, action = None):
 
     tmp = list()
     num = 0
@@ -103,7 +103,7 @@ class Button_inference:
       Surface.blit(img_act, (x_act, y_act))
       if click[0] and action != None: 
         time.sleep(1)
-        for i in param:  
+        for i in imgPath:  
           imgFile.append(action(i, model_path))
           mainImg[num] = pygame.surfarray.make_surface(imgFile[num]) # surface
           tmp.append(pygame.transform.scale(mainImg[num], (750, 750)))
@@ -259,9 +259,9 @@ def main():
     
     # 기능 버튼 
     
-    if len(imgPath)>0:
-      highlightEraser_Button = Button(image_scale_eraser, x+750, 0, 250, 250, image_scale_eraser_click, x+750, 0, execute) 
-      handWriteEraser_Button = Button_inference(image_scale_handwriteEraser, x+750, 250, 250, 250, image_scale_handwriteEraser_click, x+750, 250, remove_handwriting, imgPath) 
+    
+    highlightEraser_Button = Button(image_scale_eraser, x+750, 0, 250, 250, image_scale_eraser_click, x+750, 0, execute) 
+    handWriteEraser_Button = Button_handwrite_erase(image_scale_handwriteEraser, x+750, 250, 250, 250, image_scale_handwriteEraser_click, x+750, 250, remove_handwriting) 
     Search_Button = Button(image_scale_search, x+750, 500, 250, 250, image_scale_search_click, x+750, 500, img_load)
     save_Button =  Button(img_save, x+750, 750, 250, y, img_save_click, x+750, 750, func_img_save)
     
