@@ -98,18 +98,19 @@ class Button_inference:
     
     mouse = pygame.mouse.get_pos()
     click = pygame.mouse.get_pressed()
+    
     if x + width > mouse[0] > x and y + height > mouse[1] > y: 
       Surface.blit(img_act, (x_act, y_act))
       if click[0] and action != None: 
         time.sleep(1)
-      for i in param:  
-        imgFile.append(action(i, model_path))
-        mainImg[num] = pygame.surfarray.make_surface(imgFile[num]) # surface
-        tmp.append(pygame.transform.scale(mainImg[num], (750, 750)))
-        tmp[num] = pygame.transform.flip(tmp[num], True, False)
-        tmp[num] = pygame.transform.rotate(tmp[num], 90) # 이미지가 돌아감, 오류로 추정
-        scale_mainImg[num] = pygame.transform.scale(tmp[num], (750, 750+y))
-        num += 1
+        for i in param:  
+          imgFile.append(action(i, model_path))
+          mainImg[num] = pygame.surfarray.make_surface(imgFile[num]) # surface
+          tmp.append(pygame.transform.scale(mainImg[num], (750, 750)))
+          tmp[num] = pygame.transform.flip(tmp[num], True, False)
+          tmp[num] = pygame.transform.rotate(tmp[num], 90) # 이미지가 돌아감, 오류로 추정
+          scale_mainImg[num] = pygame.transform.scale(tmp[num], (750, 750+y))
+          num += 1
         
        
      
@@ -222,8 +223,11 @@ def execute():
   for i in range(0, len(highlight_erasedImg)):
     mainImg[i] = pygame.surfarray.make_surface(highlight_erasedImg[i]) # surface
     tmp.append(mainImg[i])
+    
+    # 이미지가 돌아감, 버그로 추정
     tmp[i] = pygame.transform.flip(tmp[i], True, False)
-    tmp[i] = pygame.transform.rotate(tmp[i], 90) # 이미지가 돌아감, 오류로 추정
+    tmp[i] = pygame.transform.rotate(tmp[i], 90) 
+    
     scale_mainImg[i] = pygame.transform.scale(tmp[i], (750, 750+y))  
   
 
@@ -267,11 +271,11 @@ def main():
       if len(scale_mainImg) >= 2: 
         img1_button = Button(small_img[1], 50, 25+150, 100, 100, small_img[1], 50, 25+150, main_img2)
         if len(scale_mainImg) >= 3:
-          img2_button = Button(small_img[2], 50, 175+150, 100, 100, small_img[2], 50, 175+150, main_img2)
+          img2_button = Button(small_img[2], 50, 175+150, 100, 100, small_img[2], 50, 175+150, main_img3)
           if len(scale_mainImg) >= 4: 
-            img3_button = Button(small_img[3], 50, 225+150, 100, 100, small_img[3], 50, 225+150, main_img2)
+            img3_button = Button(small_img[3], 50, 325+150, 100, 100, small_img[3], 50, 325+150, main_img4)
             if len(scale_mainImg) >= 5: 
-              img4_button = Button(small_img[4], 50, 375+150, 100, 100, small_img[4], 50, 375+150, main_img2)
+              img4_button = Button(small_img[4], 50, 475+150, 100, 100, small_img[4], 50, 475+150, main_img5)
    
     pygame.display.update()
     FPSCLOCK.tick(30)  
