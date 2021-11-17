@@ -106,10 +106,14 @@ class Button_handwrite_erase:
         for i in imgPath:  
           imgFile.append(action(i, model_path))
           mainImg[num] = pygame.surfarray.make_surface(imgFile[num]) # surface
-          tmp.append(pygame.transform.scale(mainImg[num], (750, 750)))
-          tmp[num] = pygame.transform.flip(tmp[num], True, False)
-          tmp[num] = pygame.transform.rotate(tmp[num], 90) # 이미지가 돌아감, 오류로 추정
-          scale_mainImg[num] = pygame.transform.scale(tmp[num], (750, 750+150))
+          mainImg[num] = pygame.transform.scale(mainImg[num], (750, 750))
+          
+          # 이미지가 돌아감, 오류로 추정
+          mainImg[num] = pygame.transform.flip(mainImg[num], True, False)
+          mainImg[num] = pygame.transform.rotate(mainImg[num], 90)
+          
+          scale_mainImg[num] = pygame.transform.scale(mainImg[num], (750, 750+150))
+          small_img[num] = pygame.transform.scale(mainImg[num], (100, 100))
           num += 1
         
        
@@ -222,13 +226,12 @@ def execute():
 
   for i in range(0, len(highlight_erasedImg)):
     mainImg[i] = pygame.surfarray.make_surface(highlight_erasedImg[i]) # surface
-    tmp.append(mainImg[i])
     
     # 이미지가 돌아감, 버그로 추정
-    tmp[i] = pygame.transform.flip(tmp[i], True, False)
-    tmp[i] = pygame.transform.rotate(tmp[i], 90) 
-    
-    scale_mainImg[i] = pygame.transform.scale(tmp[i], (750, 750+y))  
+    mainImg[i] = pygame.transform.flip(mainImg[i], True, False)
+    mainImg[i] = pygame.transform.rotate(mainImg[i], 90) 
+    scale_mainImg[i] = pygame.transform.scale(mainImg[i], (750, 750+y))  
+    small_img[i] = pygame.transform.scale(mainImg[i], (100, 100))
   
 
 # 이미지 저장 함수 (5개 까지 저장 가능)
