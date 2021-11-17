@@ -90,8 +90,8 @@ class Button:
 
 
 # 버튼 클릭시 action을 실행한다.
-class Button_inference:  
-  def __init__(self, img_in, x, y, width, height, img_act, x_act, y_act, action = None, param = None):
+class Button_handwrite_erase:  
+  def __init__(self, img_in, x, y, width, height, img_act, x_act, y_act, action = None):
 
     tmp = list()
     num = 0
@@ -102,14 +102,18 @@ class Button_inference:
       Surface.blit(img_act, (x_act, y_act))
       if click[0] and action != None: 
         time.sleep(1)
-      for i in param:  
-        imgFile.append(action(i, model_path))
-        mainImg[num] = pygame.surfarray.make_surface(imgFile[num]) # surface
-        tmp.append(pygame.transform.scale(mainImg[num], (750, 750)))
-        tmp[num] = pygame.transform.flip(tmp[num], True, False)
-        tmp[num] = pygame.transform.rotate(tmp[num], 90) # 이미지가 돌아감, 오류로 추정
-        scale_mainImg[num] = pygame.transform.scale(tmp[num], (750, 750+y))
-        num += 1
+        for i in imgPath:  
+          imgFile.append(action(i, model_path))
+          mainImg[num] = pygame.surfarray.make_surface(imgFile[num]) # surface
+          mainImg[num] = pygame.transform.scale(mainImg[num], (750, 750))
+          
+          # 이미지가 돌아감, 오류로 추정
+          mainImg[num] = pygame.transform.flip(mainImg[num], True, False)
+          mainImg[num] = pygame.transform.rotate(mainImg[num], 90)
+          
+          scale_mainImg[num] = pygame.transform.scale(mainImg[num], (750, 750+150))
+          small_img[num] = pygame.transform.scale(mainImg[num], (100, 100))
+          num += 1
         
        
      
@@ -221,17 +225,23 @@ def execute():
 
   for i in range(0, len(highlight_erasedImg)):
     mainImg[i] = pygame.surfarray.make_surface(highlight_erasedImg[i]) # surface
-    tmp.append(mainImg[i])
-    tmp[i] = pygame.transform.flip(tmp[i], True, False)
-    tmp[i] = pygame.transform.rotate(tmp[i], 90) # 이미지가 돌아감, 오류로 추정
-    scale_mainImg[i] = pygame.transform.scale(tmp[i], (750, 750+y))  
+    
+    # 이미지가 돌아감, 버그로 추정
+    mainImg[i] = pygame.transform.flip(mainImg[i], True, False)
+    mainImg[i] = pygame.transform.rotate(mainImg[i], 90) 
+    scale_mainImg[i] = pygame.transform.scale(mainImg[i], (750, 750+y))  
+    small_img[i] = pygame.transform.scale(mainImg[i], (100, 100))
   
 
 # 이미지 저장 함수 (5개 까지 저장 가능)
 def func_img_save():
+  save_img = list()
   j = 0
+  root = tkinter.Tk()
+  root.withdraw()
+  dir_path = filedialog.askdirectory(parent=root,initialdir="/",title='Please select a directory')   
   for i in scale_mainImg:
-    pygame.image.save(i, f'save\edit{j}.png')
+    pygame.image.save(i, f'{dir_path}/edit{j}.png')
     j+=1
   
 
@@ -254,10 +264,9 @@ def main():
     
     
     # 기능 버튼 
-    
-    if len(imgPath)>0:
-      highlightEraser_Button = Button(image_scale_eraser, x+750, 0, 250, 250, image_scale_eraser_click, x+750, 0, execute) 
-      handWriteEraser_Button = Button_inference(image_scale_handwriteEraser, x+750, 250, 250, 250, image_scale_handwriteEraser_click, x+750, 250, remove_handwriting, imgPath) 
+    if len(imgPath) > 0:
+      handWriteEraser_Button = Button_handwrite_erase(image_scale_handwriteEraser, x+750, 0, 250, 250, image_scale_handwriteEraser_click, x+750, 0, remove_handwriting) 
+      highlightEraser_Button = Button(image_scale_eraser, x+750, 250, 250, 250, image_scale_eraser_click, x+750, 250, execute) 
     Search_Button = Button(image_scale_search, x+750, 500, 250, 250, image_scale_search_click, x+750, 500, img_load)
     save_Button =  Button(img_save, x+750, 750, 250, y, img_save_click, x+750, 750, func_img_save)
     
