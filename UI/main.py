@@ -109,7 +109,7 @@ class Button_handwrite_erase:
           tmp.append(pygame.transform.scale(mainImg[num], (750, 750)))
           tmp[num] = pygame.transform.flip(tmp[num], True, False)
           tmp[num] = pygame.transform.rotate(tmp[num], 90) # 이미지가 돌아감, 오류로 추정
-          scale_mainImg[num] = pygame.transform.scale(tmp[num], (750, 750+y))
+          scale_mainImg[num] = pygame.transform.scale(tmp[num], (750, 750+150))
           num += 1
         
        
@@ -233,9 +233,13 @@ def execute():
 
 # 이미지 저장 함수 (5개 까지 저장 가능)
 def func_img_save():
+  save_img = list()
   j = 0
+  root = tkinter.Tk()
+  root.withdraw()
+  dir_path = filedialog.askdirectory(parent=root,initialdir="/",title='Please select a directory')   
   for i in scale_mainImg:
-    pygame.image.save(i, f'save\edit{j}.png')
+    pygame.image.save(i, f'{dir_path}/edit{j}.png')
     j+=1
   
 
