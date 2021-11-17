@@ -117,4 +117,5 @@ def remove_handwriting(img_path, model_path):
         else:
             img_output[croped_img_axis[i][1][1]-corrected_size:croped_img_axis[i][1][1]+font_max_size, croped_img_axis[i][0][0]:croped_img_axis[i][1][0]] = croped_img_list[i]
 
-    return img_output
+    # BGR-> RGB 변환
+    return img_output[:,:,::-1]
