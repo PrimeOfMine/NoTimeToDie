@@ -18,6 +18,10 @@ sys.path.append('..')
 from tlgan_inference import remove_handwriting
 
 
+
+#TLGAN inference model path
+model_path = os.path.abspath("..\\weights\\generator_15epoch.pt")
+
 pygame.init()
 
 x = 200 # 새로 늘릴 x축 
@@ -85,7 +89,7 @@ class Button:
 
 
 # 버튼 클릭시 action을 실행한다.
-class Button_wt_param:  
+class Button_inference:  
   def __init__(self, img_in, x, y, width, height, img_act, x_act, y_act, action = None, param = None):
     mouse = pygame.mouse.get_pos()
     click = pygame.mouse.get_pressed()
@@ -93,7 +97,9 @@ class Button_wt_param:
       Surface.blit(img_act, (x_act, y_act))
       if click[0] and action != None: 
         time.sleep(1)
-        action(param) # ACTION을 pygame blit함수로 ..##################################### 수정 필요
+
+        # ACTION을 pygame blit함수로 ..##################################### 수정 필요
+        Surface.blit(pygame.surfarray.make_surface(action(param, model_path)), (200, 0))
      
     else: 
         Surface.blit(img_in, (x, y))      
@@ -240,7 +246,7 @@ def main():
     # 기능 버튼 
     highlightEraser_Button = Button(image_scale_eraser, x+750, 0, 250, 250, image_scale_eraser_click, x+750, 0, execute) 
     if len(imgPath)>0:
-      handWriteEraser_Button = Button_wt_param(image_scale_handwriteEraser, x+750, 250, 250, 250, image_scale_handwriteEraser_click, x+750, 250, remove_handwriting, imgPath[0]) 
+      handWriteEraser_Button = Button_inference(image_scale_handwriteEraser, x+750, 250, 250, 250, image_scale_handwriteEraser_click, x+750, 250, remove_handwriting, imgPath[0]) 
     Search_Button = Button(image_scale_search, x+750, 500, 250, 250, image_scale_search_click, x+750, 500, img_load)
     save_Button =  Button(img_save, x+750, 750, 250, y, img_save_click, x+750, 750, func_img_save)
     

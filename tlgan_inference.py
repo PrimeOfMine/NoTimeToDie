@@ -12,6 +12,8 @@ import torchvision.transforms as transforms
 from models.tlgan.tlgan import Generator
 from data.datasets import channel_first, channel_last
 
+
+
 def make_axis(img):
 
     img = img.astype(np.uint8)
@@ -61,8 +63,9 @@ def tlgan_infer(img, weight_path="./weights/generator.pt", img_col_size=60, img_
     return result, axis
 
 ## Inference code 완료
-def remove_handwriting(img_path):    
-    tlgan_model_path = "C:\\Users\\dongj\\Desktop\\git_test\\NoTimeToDie\\weights\\generator_15epoch.pt"
+def remove_handwriting(img_path, model_path):    
+
+    tlgan_model_path = model_path    
     path_to_img = img_path
 
     img = cv2.imread(path_to_img).astype(np.float32)
