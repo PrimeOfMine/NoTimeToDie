@@ -17,10 +17,10 @@ sys.path.append('..')
 
 from tlgan_inference import remove_handwriting
 
-
-
 #TLGAN inference model path
 model_path = os.path.abspath("..\\weights\\generator_15epoch.pt")
+
+
 
 pygame.init()
 
@@ -99,7 +99,9 @@ class Button_inference:
         time.sleep(1)
 
         # ACTION을 pygame blit함수로 ..##################################### 수정 필요
-        Surface.blit(pygame.surfarray.make_surface(action(param, model_path)), (200, 0))
+        Surface.blit(pygame.transform.scale(pygame.surfarray.make_surface(action(param, model_path)), (750, 750+y)), (200, 0))
+
+        pygame.Surface.update()
      
     else: 
         Surface.blit(img_in, (x, y))      
