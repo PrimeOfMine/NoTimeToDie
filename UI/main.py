@@ -264,8 +264,7 @@ def main():
     # 기능 버튼 
     if len(imgPath) > 0:
       handWriteEraser_Button = Button_handwrite_erase(image_scale_handwriteEraser, x+750, 0, 250, 250, image_scale_handwriteEraser_click, x+750, 0, remove_handwriting) 
-      if len(imgFile) > 0:
-        highlightEraser_Button = Button(image_scale_eraser, x+750, 250, 250, 250, image_scale_eraser_click, x+750, 250, execute) 
+      highlightEraser_Button = Button(image_scale_eraser, x+750, 250, 250, 250, image_scale_eraser_click, x+750, 250, execute) 
     Search_Button = Button(image_scale_search, x+750, 500, 250, 250, image_scale_search_click, x+750, 500, img_load)
     save_Button =  Button(img_save, x+750, 750, 250, y, img_save_click, x+750, 750, func_img_save)
     
