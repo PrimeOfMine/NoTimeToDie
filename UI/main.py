@@ -276,11 +276,11 @@ def main():
       if len(scale_mainImg) >= 2: 
         img1_button = Button(small_img[1], 50, 25+150, 100, 100, small_img[1], 50, 25+150, main_img2)
         if len(scale_mainImg) >= 3:
-          img2_button = Button(small_img[2], 50, 175+150, 100, 100, small_img[2], 50, 175+150, main_img2)
+          img2_button = Button(small_img[2], 50, 175+150, 100, 100, small_img[2], 50, 175+150, main_img3)
           if len(scale_mainImg) >= 4: 
-            img3_button = Button(small_img[3], 50, 225+150, 100, 100, small_img[3], 50, 225+150, main_img2)
+            img3_button = Button(small_img[3], 50, 325+150, 100, 100, small_img[3], 50, 325+150, main_img4)
             if len(scale_mainImg) >= 5: 
-              img4_button = Button(small_img[4], 50, 375+150, 100, 100, small_img[4], 50, 375+150, main_img2)
+              img4_button = Button(small_img[4], 50, 475+150, 100, 100, small_img[4], 50, 475+150, main_img5)
    
     pygame.display.update()
     FPSCLOCK.tick(30)  
