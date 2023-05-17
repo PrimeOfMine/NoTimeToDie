@@ -23,6 +23,9 @@ RedoPaper는 공용 문서에 존재하는 타인의 필기로 인한 불편함�
 ## 기능 설명
 - 손글씨 및 하이라이트 제거
 
+## FlowChart 
+![FlowChart](images/flowchart.png)
+
 ## 사용 기술 및 구현 방식
 
 - **PyTorch**: Python 기반의 오픈소스 머신러닝 라이브러리. 유연하고 빠른 딥러닝 연구 플랫폼으로 TLGAN Deep Learning Model의 학습 및 추론에 활용.
