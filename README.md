@@ -2,7 +2,6 @@
 
 ## UI
 ![UI](images/erase_handwrite.png)
-![UI](images/erase_highlight.png)
 
 ## 목차
 1. [프로젝트 소개](#프로젝트-소개)
