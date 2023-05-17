@@ -1,6 +1,5 @@
 # RedoPaper
 
-## UI
 ![UI](images/erase_handwrite.png)
 
 ## 목차
