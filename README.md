@@ -35,6 +35,7 @@ RedoPaper는 공용 문서에 존재하는 타인의 필기로 인한 불편함�
 - **TLGAN**: Robust Reading Challenge on Scanned Receipts OCR and Information Extraction (SROIE) 대회 우승 모델. 영수증 등의 출력물에서 텍스트 영역 예측에 사용되며, SuperResolution-GAN의 아이디어를 적용. 출력물의 텍스트 영역을 예측하여 추출하는데 사용됨.
 
 ## 결과
+![UI](images/result.png)
 - RedoPaper는 원본 문서에서 손글씨와 하이라이트를 순차적으로 제거합니다
 - 손글씨만 제거된 문서를 원하면 해당 단계에서 save하여 저장할 수 있습니다.
 
